@@ -1,0 +1,7 @@
+In this problem three missionaries and cannibals have to transfer from side1 to side 2
+
+condition:
+-The boat can carry either one or two people.
+-The goal is to move all missionaries and cannibals 
+    from one side of the river to the other without ever leaving 
+    more cannibals than missionaries on either side.
