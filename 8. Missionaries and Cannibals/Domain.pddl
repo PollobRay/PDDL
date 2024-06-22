@@ -30,6 +30,9 @@
                         (value3 ?missionaries_in_side1)
                         (value1 ?cannibals_in_side1)
                         (transfer ?x ?y)
+
+                        (missionary ?missionaries_in_side1)
+                        (cannibal ?cannibals_in_side1)
         )
         :effect (and 
                         (not (boat ?from))
@@ -57,6 +60,8 @@
                         (value2 ?missionaries_in_side1)
                         (value2 ?cannibals_in_side1)
                         (transfer ?x ?y)
+                        (missionary ?missionaries_in_side1)
+                        (cannibal ?cannibals_in_side1)
         )
         :effect (and 
                         (not (boat ?from))
@@ -84,6 +89,8 @@
                         (value0 ?missionaries_in_side1)    
                         (value1 ?cannibals_in_side1) 
                         (transfer ?x ?y)
+                        (missionary ?missionaries_in_side1)
+                        (cannibal ?cannibals_in_side1)
 
         )
         :effect (and 
@@ -111,6 +118,8 @@
                         (value0 ?missionaries_in_side1)    
                         (value2 ?cannibals_in_side1)  
                         (transfer ?x ?y) 
+                        (missionary ?missionaries_in_side1)
+                        (cannibal ?cannibals_in_side1)
 
         )
         :effect (and 
@@ -137,7 +146,9 @@
                         (stayed ?y ?from)         ; y must stay at 'from'
                         (value1 ?missionaries_in_side1)    
                         (value1 ?cannibals_in_side1)
-                        (transfer ?x ?y)  
+                        (transfer ?x ?y) 
+                        (missionary ?missionaries_in_side1)
+                        (cannibal ?cannibals_in_side1) 
 
         )
         :effect (and 
@@ -165,6 +176,8 @@
                         (value3 ?missionaries_in_side1)
                         (value3 ?cannibals_in_side1)
                         (transfer ?x ?y)
+                        (missionary ?missionaries_in_side1)
+                        (cannibal ?cannibals_in_side1)
         )
         :effect (and 
                         (not (boat ?from))
@@ -191,6 +204,8 @@
                         (value3 ?missionaries_in_side1)
                         (value2 ?cannibals_in_side1)
                         (transfer ?x ?y)
+                        (missionary ?missionaries_in_side1)
+                        (cannibal ?cannibals_in_side1)
         )
         :effect (and 
                         (not (boat ?from))
@@ -217,6 +232,8 @@
                         (value0 ?missionaries_in_side1)
                         (value3 ?cannibals_in_side1)
                         (transfer ?x ?y)
+                        (missionary ?missionaries_in_side1)
+                        (cannibal ?cannibals_in_side1)
         )
         :effect (and 
                         (not (boat ?from))
@@ -243,6 +260,8 @@
                         (value0 ?missionaries_in_side1)
                         (value2 ?cannibals_in_side1)
                         (transfer ?x ?y)
+                        (missionary ?missionaries_in_side1)
+                        (cannibal ?cannibals_in_side1)
         )
         :effect (and 
                         (not (boat ?from))
@@ -269,6 +288,8 @@
                         (value3 ?missionaries_in_side1)
                         (value0 ?cannibals_in_side1)
                         (transfer ?x ?y)
+                        (missionary ?missionaries_in_side1)
+                        (cannibal ?cannibals_in_side1)
                        
         )
         :effect (and 
@@ -296,6 +317,8 @@
                         (value3 ?missionaries_in_side1)
                         (value1 ?cannibals_in_side1)
                         (transfer ?x ?y)
+                        (missionary ?missionaries_in_side1)
+                        (cannibal ?cannibals_in_side1)
                        
         )
         :effect (and 
@@ -323,6 +346,8 @@
                         (value0 ?missionaries_in_side1)
                         (value0 ?cannibals_in_side1)
                         (transfer ?x ?y)
+                        (missionary ?missionaries_in_side1)
+                        (cannibal ?cannibals_in_side1)
                        
         )
         :effect (and 
@@ -350,6 +375,8 @@
                         (value0 ?missionaries_in_side1)
                         (value1 ?cannibals_in_side1)
                         (transfer ?x ?y)
+                        (missionary ?missionaries_in_side1)
+                        (cannibal ?cannibals_in_side1)
                        
         )
         :effect (and 
@@ -375,7 +402,9 @@
                         (stayed ?x ?from)         ; x must stay at 'from'
                         (stayed ?y ?from)         ; y must stay at 'from'
                         (value1 ?missionaries_in_side1)
-                        (value1 ?cannibals_in_side1)             
+                        (value1 ?cannibals_in_side1) 
+                        (missionary ?missionaries_in_side1)
+                        (cannibal ?cannibals_in_side1)            
         )
         :effect (and 
                         (not (boat ?from))
@@ -402,7 +431,9 @@
                         (stayed ?x ?from)         ; x must stay at 'from'
                         (stayed ?y ?from)         ; y must stay at 'from'
                         (value2 ?missionaries_in_side1)
-                        (value2 ?cannibals_in_side1)             
+                        (value2 ?cannibals_in_side1) 
+                        (missionary ?missionaries_in_side1)
+                        (cannibal ?cannibals_in_side1)            
         )
         :effect (and 
                         (not (boat ?from))
@@ -429,7 +460,9 @@
                         (stayed ?x ?from)         ; x must stay at 'from'
                         (stayed ?y ?from)         ; y must stay at 'from'
                         (value3 ?missionaries_in_side1)
-                        (value3 ?cannibals_in_side1)             
+                        (value3 ?cannibals_in_side1)  
+                        (missionary ?missionaries_in_side1)
+                        (cannibal ?cannibals_in_side1)           
         )
         :effect (and 
                         (not (boat ?from))
@@ -456,7 +489,9 @@
                         (stayed ?x ?from)         ; x must stay at 'from'
                         (stayed ?y ?from)         ; y must stay at 'from'
                         (value0 ?missionaries_in_side1)
-                        (value0 ?cannibals_in_side1)             
+                        (value0 ?cannibals_in_side1) 
+                        (missionary ?missionaries_in_side1)
+                        (cannibal ?cannibals_in_side1)            
         )            
         
         :effect (and 
@@ -484,7 +519,9 @@
                         (stayed ?x ?from)         ; x must stay at 'from'
                         (stayed ?y ?from)         ; y must stay at 'from'
                         (value1 ?missionaries_in_side1)
-                        (value1 ?cannibals_in_side1)             
+                        (value1 ?cannibals_in_side1) 
+                        (missionary ?missionaries_in_side1)
+                        (cannibal ?cannibals_in_side1)            
         )            
         
         :effect (and 
@@ -512,7 +549,9 @@
                         (stayed ?x ?from)         ; x must stay at 'from'
                         (stayed ?y ?from)         ; y must stay at 'from'
                         (value2 ?missionaries_in_side1)
-                        (value2 ?cannibals_in_side1)             
+                        (value2 ?cannibals_in_side1)  
+                        (missionary ?missionaries_in_side1)
+                        (cannibal ?cannibals_in_side1)           
         )            
         
         :effect (and 
@@ -538,7 +577,9 @@
                         (missionary ?x)
                         (stayed ?x ?from)         ; x must stay at 'from'
                         (value1 ?missionaries_in_side1)
-                        (value1 ?cannibals_in_side1)  
+                        (value1 ?cannibals_in_side1) 
+                        (missionary ?missionaries_in_side1)
+                        (cannibal ?cannibals_in_side1) 
         )
         :effect (and 
                         (not (boat ?from))
@@ -559,7 +600,9 @@
                         (missionary ?x)
                         (stayed ?x ?from)         ; x must stay at 'from'
                         (value3 ?missionaries_in_side1)
-                        (value2 ?cannibals_in_side1)  
+                        (value2 ?cannibals_in_side1)
+                        (missionary ?missionaries_in_side1)
+                        (cannibal ?cannibals_in_side1)  
         )
         :effect (and 
                         (not (boat ?from))
@@ -581,6 +624,8 @@
                         (stayed ?x ?from)         ; x must stay at 'from'
                         (value0 ?missionaries_in_side1)
                         (value1 ?cannibals_in_side1)
+                        (missionary ?missionaries_in_side1)
+                        (cannibal ?cannibals_in_side1)
         )
         :effect (and 
                         (not (boat ?from))
@@ -602,6 +647,8 @@
                         (stayed ?x ?from)         ; x must stay at 'from'
                         (value2 ?missionaries_in_side1)
                         (value2 ?cannibals_in_side1)
+                        (missionary ?missionaries_in_side1)
+                        (cannibal ?cannibals_in_side1)
         )
         :effect (and 
                         (not (boat ?from))
@@ -623,6 +670,8 @@
                         (stayed ?x ?from)         ; x must stay at 'from'
                         (value0 ?missionaries_in_side1)
                         (value1 ?cannibals_in_side1)
+                        (missionary ?missionaries_in_side1)
+                        (cannibal ?cannibals_in_side1)
         )
         :effect (and 
                         (not (boat ?from))
@@ -644,6 +693,8 @@
                         (stayed ?x ?from)         ; x must stay at 'from'
                         (value0 ?missionaries_in_side1)
                         (value2 ?cannibals_in_side1)
+                        (missionary ?missionaries_in_side1)
+                        (cannibal ?cannibals_in_side1)
         )
         :effect (and 
                         (not (boat ?from))
@@ -665,6 +716,8 @@
                         (stayed ?x ?from)         ; x must stay at 'from'
                         (value0 ?missionaries_in_side1)
                         (value3 ?cannibals_in_side1)
+                        (missionary ?missionaries_in_side1)
+                        (cannibal ?cannibals_in_side1)
         )
         :effect (and 
                         (not (boat ?from))
@@ -686,6 +739,8 @@
                         (stayed ?x ?from)         ; x must stay at 'from'
                         (value3 ?missionaries_in_side1)
                         (value3 ?cannibals_in_side1)
+                        (missionary ?missionaries_in_side1)
+                        (cannibal ?cannibals_in_side1)
         )
         :effect (and 
                         (not (boat ?from))
@@ -707,6 +762,8 @@
                         (stayed ?x ?from)         ; x must stay at 'from'
                         (value3 ?missionaries_in_side1)
                         (value2 ?cannibals_in_side1)
+                        (missionary ?missionaries_in_side1)
+                        (cannibal ?cannibals_in_side1)
         )
         :effect (and 
                         (not (boat ?from))
@@ -728,6 +785,8 @@
                         (stayed ?x ?from)         ; x must stay at 'from'
                         (value3 ?missionaries_in_side1)
                         (value1 ?cannibals_in_side1)
+                        (missionary ?missionaries_in_side1)
+                        (cannibal ?cannibals_in_side1)
         )
         :effect (and 
                         (not (boat ?from))
@@ -749,6 +808,8 @@
                         (stayed ?x ?from)         ; x must stay at 'from'
                         (value0 ?missionaries_in_side1)
                         (value0 ?cannibals_in_side1)
+                        (missionary ?missionaries_in_side1)
+                        (cannibal ?cannibals_in_side1)
         )
         :effect (and 
                         (not (boat ?from))
@@ -770,6 +831,8 @@
                         (stayed ?x ?from)         ; x must stay at 'from'
                         (value0 ?missionaries_in_side1)
                         (value1 ?cannibals_in_side1)
+                        (missionary ?missionaries_in_side1)
+                        (cannibal ?cannibals_in_side1)
         )
         :effect (and 
                         (not (boat ?from))
@@ -791,6 +854,8 @@
                         (stayed ?x ?from)         ; x must stay at 'from'
                         (value0 ?missionaries_in_side1)
                         (value2 ?cannibals_in_side1)
+                        (missionary ?missionaries_in_side1)
+                        (cannibal ?cannibals_in_side1)
         )
         :effect (and 
                         (not (boat ?from))
@@ -812,6 +877,8 @@
                         (stayed ?x ?from)         ; x must stay at 'from'
                         (value3 ?missionaries_in_side1)
                         (value0 ?cannibals_in_side1)
+                        (missionary ?missionaries_in_side1)
+                        (cannibal ?cannibals_in_side1)
         )
         :effect (and 
                         (not (boat ?from))
@@ -833,6 +900,8 @@
                         (stayed ?x ?from)         ; x must stay at 'from'
                         (value3 ?missionaries_in_side1)
                         (value1 ?cannibals_in_side1)
+                        (missionary ?missionaries_in_side1)
+                        (cannibal ?cannibals_in_side1)
         )
         :effect (and 
                         (not (boat ?from))
@@ -854,6 +923,8 @@
                         (stayed ?x ?from)         ; x must stay at 'from'
                         (value3 ?missionaries_in_side1)
                         (value2 ?cannibals_in_side1)
+                        (missionary ?missionaries_in_side1)
+                        (cannibal ?cannibals_in_side1)
         )
         :effect (and 
                         (not (boat ?from))

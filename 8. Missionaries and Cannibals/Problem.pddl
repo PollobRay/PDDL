@@ -31,6 +31,9 @@
         (value3 missionaries_in_side1)     ; three missionaries at side 1
         (value3 cannibals_in_side1)     ; three cannibals at side 1
 
+        (missionary missionaries_in_side1)
+        (cannibal cannibals_in_side1)
+
         (transfer cann1 cann2)
         (transfer cann1 cann3)
         (transfer cann2 cann1)
