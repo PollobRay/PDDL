@@ -1,0 +1,8 @@
+
+Problem Description:
+
+    There are three pair of couples (husbands and wives) they want to across a river using a boat.
+    The boat can carry one or two people at a time.
+    No wife can be in the presence of another husband unless her own husband.
+
+The goal is to find a way to get all six people across the river.
