@@ -1,0 +1,4 @@
+Dining Philosophers Problem States that there are 5 Philosophers who are engaged in two activities,
+Thinking and Eating.
+Meals are taken communally in a table with five plates and five forks in a cyclic manner.
+For eating Philosopher need left and right forks.
