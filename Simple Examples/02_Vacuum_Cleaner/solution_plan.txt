@@ -1,0 +1,4 @@
+(suck a)
+(move a b)
+(move b c)
+(suck c)

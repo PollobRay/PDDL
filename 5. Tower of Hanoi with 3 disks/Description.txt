@@ -1,19 +1,26 @@
+There are three towers and three disks of different sizes (disk1 is the smallest, disk3 the largest).
+Initially all disks are stacked on Tower 1, with the largest at the bottom.
+The goal is to move the whole stack to Tower 3.
+
+Rules:
+- Only one disk can be moved at a time.
+- Only the top disk of a stack can be moved.
+- A disk can never be placed on top of a smaller disk.
+
 Initially:
 
-Tower 1:     |  Tower 2: |  Tower 3: |
-        |         |         |
-      =====       |         |
-     =======      |         |
-    =========     |         |
------------------------------
+   Tower 1:   |   Tower 2:   |   Tower 3:
+      |       |      |       |      |
+    =====     |      |       |      |
+   =======    |      |       |      |
+  =========   |      |       |      |
+------------------------------------------
 
 Finally:
 
-Initially:
-
-Tower 1: |  Tower 2:  |  Tower 3: |
-        |         |         |
-        |         |       =====
-        |         |      =======
-        |         |     =========
------------------------------
+   Tower 1:   |   Tower 2:   |   Tower 3:
+      |       |      |       |      |
+      |       |      |       |    =====
+      |       |      |       |   =======
+      |       |      |       |  =========
+------------------------------------------

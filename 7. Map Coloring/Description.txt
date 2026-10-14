@@ -1,0 +1,22 @@
+Color the map of Australia (see example.png) using three colors: red, green and blue.
+No two adjacent regions may have the same color.
+
+Regions:
+    WA  - Western Australia
+    NT  - Northern Territory
+    SA  - South Australia
+    Q   - Queensland
+    NSW - New South Wales
+    V   - Victoria
+    T   - Tasmania
+
+Adjacent regions:
+    WA  : NT, SA
+    NT  : WA, SA, Q
+    SA  : WA, NT, Q, NSW, V
+    Q   : NT, SA, NSW
+    NSW : Q, SA, V
+    V   : SA, NSW
+    T   : (none)
+
+The goal is to color every region.

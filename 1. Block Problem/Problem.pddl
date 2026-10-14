@@ -1,29 +1,30 @@
-(define (problem BLOCKS-5-0) 
+(define (problem BLOCKS-5-0)
     (:domain BLOCKS)
     (:objects
-        B E A C D 
+        A B C D E
     )
     (:init
-        (clear E)
-        (clear A)
-        (clear B)
         (ontable E)
         (ontable A)
         (ontable B)
-        (clear D)
         (ontable C)
         (on D C)
+
+        (clear E)
+        (clear A)
+        (clear B)
+        (clear D)
         (handempty)
     )
     (:goal (and
         (ontable A)
-        (ontable D)
-        (on E C)
         (on C A)
+        (on E C)
         (clear E)
+
         (ontable D)
         (on B D)
         (clear B)
-        (handempty)  
+        (handempty)
     ))
 )

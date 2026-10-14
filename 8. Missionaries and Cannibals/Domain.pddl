@@ -1,938 +1,102 @@
 (define (domain missionaries_cannibals_domain)
-    (:requirements :strips :negative-preconditions :fluents :adl)
+    (:requirements :strips :typing)
+
+    (:types side num)
+
     (:predicates
-        (stayed ?x ?side)           ; x stayed at side 1 or side 2
-        (boat ?side)                ; boat is in side 1 or side 2 
-        (missionary ?x)             ; x is a missionary              
-        (cannibal ?x)               ; x is a cannibal
-        (is_side1 ?x)
-        (is_side2 ?x)
-        
-        (value3 ?x)
-        (value2 ?x)
-        (value1 ?x)
-        (value0 ?x)
-
-        (transfer ?x ?y)
+        (boat ?s - side)                    ; boat is at side s
+        (opposite ?s1 - side ?s2 - side)    ; s1 and s2 are opposite river sides
+        (missionaries ?s - side ?n - num)   ; there are n missionaries at side s
+        (cannibals ?s - side ?n - num)      ; there are n cannibals at side s
+        (plus1 ?n1 - num ?n2 - num)         ; n2 = n1 + 1
+        (plus2 ?n1 - num ?n2 - num)         ; n2 = n1 + 2
+        (safe ?m - num ?c - num)            ; m missionaries with c cannibals is safe
+                                            ; (no missionaries, or missionaries >= cannibals)
     )
 
-    
-    (:action move_two_miss_s1_to_s2_m31
-        :parameters (?x ?y ?from ?to ?missionaries_in_side1 ?cannibals_in_side1)
-        :precondition (and 
-                        (boat ?from)              ; boat must be at 'from'
-                        (is_side1 ?from)
-                        (is_side2 ?to)
-                        (missionary ?x)
-                        (missionary ?y)
-                        (stayed ?x ?from)         ; x must stay at 'from'
-                        (stayed ?y ?from)         ; y must stay at 'from'
-                        (value3 ?missionaries_in_side1)
-                        (value1 ?cannibals_in_side1)
-                        (transfer ?x ?y)
+    ; ?m1 ?c1   : missionaries / cannibals at 'from' before the move   (?m1n ?c1n after)
+    ; ?m2 ?c2   : missionaries / cannibals at 'to'   before the move   (?m2n ?c2n after)
 
-                        (missionary ?missionaries_in_side1)
-                        (cannibal ?cannibals_in_side1)
+    (:action move_one_missionary
+        :parameters (?from ?to - side ?m1 ?m1n ?m2 ?m2n ?c1 ?c2 - num)
+        :precondition (and
+            (boat ?from) (opposite ?from ?to)
+            (missionaries ?from ?m1) (plus1 ?m1n ?m1)
+            (missionaries ?to ?m2) (plus1 ?m2 ?m2n)
+            (cannibals ?from ?c1) (cannibals ?to ?c2)
+            (safe ?m1n ?c1) (safe ?m2n ?c2)
         )
-        :effect (and 
-                        (not (boat ?from))
-                        (boat ?to)
-                        (not (stayed ?x ?from))
-                        (not (stayed ?y ?from))
-                        (stayed ?x ?to)
-                        (stayed ?y ?to)
-                        (not (value3 ?missionaries_in_side1)) 
-                        (value1 ?missionaries_in_side1)
-                       
+        :effect (and
+            (not (boat ?from)) (boat ?to)
+            (not (missionaries ?from ?m1)) (missionaries ?from ?m1n)
+            (not (missionaries ?to ?m2)) (missionaries ?to ?m2n)
         )
     )
 
-    (:action move_two_miss_s1_to_s2_m22
-        :parameters (?x ?y ?from ?to ?missionaries_in_side1 ?cannibals_in_side1)
-        :precondition (and 
-                        (boat ?from)              ; boat must be at 'from'
-                        (is_side1 ?from)
-                        (is_side2 ?to)
-                        (missionary ?x)
-                        (missionary ?y)
-                        (stayed ?x ?from)         ; x must stay at 'from'
-                        (stayed ?y ?from)         ; y must stay at 'from'
-                        (value2 ?missionaries_in_side1)
-                        (value2 ?cannibals_in_side1)
-                        (transfer ?x ?y)
-                        (missionary ?missionaries_in_side1)
-                        (cannibal ?cannibals_in_side1)
+    (:action move_two_missionaries
+        :parameters (?from ?to - side ?m1 ?m1n ?m2 ?m2n ?c1 ?c2 - num)
+        :precondition (and
+            (boat ?from) (opposite ?from ?to)
+            (missionaries ?from ?m1) (plus2 ?m1n ?m1)
+            (missionaries ?to ?m2) (plus2 ?m2 ?m2n)
+            (cannibals ?from ?c1) (cannibals ?to ?c2)
+            (safe ?m1n ?c1) (safe ?m2n ?c2)
         )
-        :effect (and 
-                        (not (boat ?from))
-                        (boat ?to)
-                        (not (stayed ?x ?from))
-                        (not (stayed ?y ?from))
-                        (stayed ?x ?to)
-                        (stayed ?y ?to)
-                        (not (value2 ?missionaries_in_side1)) 
-                        (value0 ?missionaries_in_side1)
-                       
+        :effect (and
+            (not (boat ?from)) (boat ?to)
+            (not (missionaries ?from ?m1)) (missionaries ?from ?m1n)
+            (not (missionaries ?to ?m2)) (missionaries ?to ?m2n)
         )
     )
 
-    (:action move_two_miss_s2_to_s1_m01
-        :parameters (?x ?y ?from ?to ?missionaries_in_side1 ?cannibals_in_side1)
-        :precondition (and 
-                        (boat ?from)              ; boat must be at 'from'
-                        (is_side2 ?from)
-                        (is_side1 ?to)
-                        (missionary ?x)
-                        (missionary ?y)
-                        (stayed ?x ?from)         ; x must stay at 'from'
-                        (stayed ?y ?from)         ; y must stay at 'from'
-                        (value0 ?missionaries_in_side1)    
-                        (value1 ?cannibals_in_side1) 
-                        (transfer ?x ?y)
-                        (missionary ?missionaries_in_side1)
-                        (cannibal ?cannibals_in_side1)
-
+    (:action move_one_cannibal
+        :parameters (?from ?to - side ?c1 ?c1n ?c2 ?c2n ?m1 ?m2 - num)
+        :precondition (and
+            (boat ?from) (opposite ?from ?to)
+            (cannibals ?from ?c1) (plus1 ?c1n ?c1)
+            (cannibals ?to ?c2) (plus1 ?c2 ?c2n)
+            (missionaries ?from ?m1) (missionaries ?to ?m2)
+            (safe ?m1 ?c1n) (safe ?m2 ?c2n)
         )
-        :effect (and 
-                        (not (boat ?from))
-                        (boat ?to)
-                        (not (stayed ?x ?from))
-                        (not (stayed ?y ?from))
-                        (stayed ?x ?to)
-                        (stayed ?y ?to) 
-                        (not (value0 ?missionaries_in_side1) )
-                        (value2 ?missionaries_in_side1) 
+        :effect (and
+            (not (boat ?from)) (boat ?to)
+            (not (cannibals ?from ?c1)) (cannibals ?from ?c1n)
+            (not (cannibals ?to ?c2)) (cannibals ?to ?c2n)
         )
     )
 
-    (:action move_two_miss_s2_to_s1_m02
-        :parameters (?x ?y ?from ?to ?missionaries_in_side1 ?cannibals_in_side1)
-        :precondition (and 
-                        (boat ?from)              ; boat must be at 'from'
-                        (is_side2 ?from)
-                        (is_side1 ?to)
-                        (missionary ?x)
-                        (missionary ?y)
-                        (stayed ?x ?from)         ; x must stay at 'from'
-                        (stayed ?y ?from)         ; y must stay at 'from'
-                        (value0 ?missionaries_in_side1)    
-                        (value2 ?cannibals_in_side1)  
-                        (transfer ?x ?y) 
-                        (missionary ?missionaries_in_side1)
-                        (cannibal ?cannibals_in_side1)
-
+    (:action move_two_cannibals
+        :parameters (?from ?to - side ?c1 ?c1n ?c2 ?c2n ?m1 ?m2 - num)
+        :precondition (and
+            (boat ?from) (opposite ?from ?to)
+            (cannibals ?from ?c1) (plus2 ?c1n ?c1)
+            (cannibals ?to ?c2) (plus2 ?c2 ?c2n)
+            (missionaries ?from ?m1) (missionaries ?to ?m2)
+            (safe ?m1 ?c1n) (safe ?m2 ?c2n)
         )
-        :effect (and 
-                        (not (boat ?from))
-                        (boat ?to)
-                        (not (stayed ?x ?from))
-                        (not (stayed ?y ?from))
-                        (stayed ?x ?to)
-                        (stayed ?y ?to) 
-                        (not (value0 ?missionaries_in_side1) )
-                        (value2 ?missionaries_in_side1) 
+        :effect (and
+            (not (boat ?from)) (boat ?to)
+            (not (cannibals ?from ?c1)) (cannibals ?from ?c1n)
+            (not (cannibals ?to ?c2)) (cannibals ?to ?c2n)
         )
     )
 
-     (:action move_two_miss_s2_to_s1_m11
-        :parameters (?x ?y ?from ?to ?missionaries_in_side1 ?cannibals_in_side1)
-        :precondition (and 
-                        (boat ?from)              ; boat must be at 'from'
-                        (is_side2 ?from)
-                        (is_side1 ?to)
-                        (missionary ?x)
-                        (missionary ?y)
-                        (stayed ?x ?from)         ; x must stay at 'from'
-                        (stayed ?y ?from)         ; y must stay at 'from'
-                        (value1 ?missionaries_in_side1)    
-                        (value1 ?cannibals_in_side1)
-                        (transfer ?x ?y) 
-                        (missionary ?missionaries_in_side1)
-                        (cannibal ?cannibals_in_side1) 
-
+    (:action move_one_missionary_one_cannibal
+        :parameters (?from ?to - side ?m1 ?m1n ?m2 ?m2n ?c1 ?c1n ?c2 ?c2n - num)
+        :precondition (and
+            (boat ?from) (opposite ?from ?to)
+            (missionaries ?from ?m1) (plus1 ?m1n ?m1)
+            (missionaries ?to ?m2) (plus1 ?m2 ?m2n)
+            (cannibals ?from ?c1) (plus1 ?c1n ?c1)
+            (cannibals ?to ?c2) (plus1 ?c2 ?c2n)
+            (safe ?m1n ?c1n) (safe ?m2n ?c2n)
         )
-        :effect (and 
-                        (not (boat ?from))
-                        (boat ?to)
-                        (not (stayed ?x ?from))
-                        (not (stayed ?y ?from))
-                        (stayed ?x ?to)
-                        (stayed ?y ?to) 
-                        (not (value1 ?missionaries_in_side1) )
-                        (value3 ?missionaries_in_side1) 
-        )
-    )
-     
-    (:action move_two_cann_s1_to_s2_c33
-        :parameters (?x ?y ?from ?to ?missionaries_in_side1 ?cannibals_in_side1)
-        :precondition (and 
-                        (boat ?from)              ; boat must be at 'from'
-                        (is_side1 ?from)
-                        (is_side2 ?to)
-                        (cannibal ?x)
-                        (cannibal?y)
-                        (stayed ?x ?from)         ; x must stay at 'from'
-                        (stayed ?y ?from)         ; y must stay at 'from'
-                        (value3 ?missionaries_in_side1)
-                        (value3 ?cannibals_in_side1)
-                        (transfer ?x ?y)
-                        (missionary ?missionaries_in_side1)
-                        (cannibal ?cannibals_in_side1)
-        )
-        :effect (and 
-                        (not (boat ?from))
-                        (boat ?to)
-                        (not (stayed ?x ?from))
-                        (not (stayed ?y ?from))
-                        (stayed ?x ?to)
-                        (stayed ?y ?to) 
-                        (not (value3 ?cannibals_in_side1))
-                        (value1 ?cannibals_in_side1)
-        )
-    )
-
-    (:action move_two_cann_s1_to_s2_c32
-        :parameters (?x ?y ?from ?to ?missionaries_in_side1 ?cannibals_in_side1)
-        :precondition (and 
-                        (boat ?from)              ; boat must be at 'from'
-                        (is_side1 ?from)
-                        (is_side2 ?to)
-                        (cannibal ?x)
-                        (cannibal?y)
-                        (stayed ?x ?from)         ; x must stay at 'from'
-                        (stayed ?y ?from)         ; y must stay at 'from'
-                        (value3 ?missionaries_in_side1)
-                        (value2 ?cannibals_in_side1)
-                        (transfer ?x ?y)
-                        (missionary ?missionaries_in_side1)
-                        (cannibal ?cannibals_in_side1)
-        )
-        :effect (and 
-                        (not (boat ?from))
-                        (boat ?to)
-                        (not (stayed ?x ?from))
-                        (not (stayed ?y ?from))
-                        (stayed ?x ?to)
-                        (stayed ?y ?to) 
-                        (not (value2 ?cannibals_in_side1))
-                        (value0 ?cannibals_in_side1)
-        )
-    )
-
-    (:action move_two_cann_s1_to_s2_c03
-        :parameters (?x ?y ?from ?to ?missionaries_in_side1 ?cannibals_in_side1)
-        :precondition (and 
-                        (boat ?from)              ; boat must be at 'from'
-                        (is_side1 ?from)
-                        (is_side2 ?to)
-                        (cannibal ?x)
-                        (cannibal?y)
-                        (stayed ?x ?from)         ; x must stay at 'from'
-                        (stayed ?y ?from)         ; y must stay at 'from'
-                        (value0 ?missionaries_in_side1)
-                        (value3 ?cannibals_in_side1)
-                        (transfer ?x ?y)
-                        (missionary ?missionaries_in_side1)
-                        (cannibal ?cannibals_in_side1)
-        )
-        :effect (and 
-                        (not (boat ?from))
-                        (boat ?to)
-                        (not (stayed ?x ?from))
-                        (not (stayed ?y ?from))
-                        (stayed ?x ?to)
-                        (stayed ?y ?to) 
-                        (not (value3 ?cannibals_in_side1))
-                        (value1 ?cannibals_in_side1)
-        )
-    )
-
-    (:action move_two_cann_s1_to_s2_c02
-        :parameters (?x ?y ?from ?to ?missionaries_in_side1 ?cannibals_in_side1)
-        :precondition (and 
-                        (boat ?from)              ; boat must be at 'from'
-                        (is_side1 ?from)
-                        (is_side2 ?to)
-                        (cannibal ?x)
-                        (cannibal?y)
-                        (stayed ?x ?from)         ; x must stay at 'from'
-                        (stayed ?y ?from)         ; y must stay at 'from'
-                        (value0 ?missionaries_in_side1)
-                        (value2 ?cannibals_in_side1)
-                        (transfer ?x ?y)
-                        (missionary ?missionaries_in_side1)
-                        (cannibal ?cannibals_in_side1)
-        )
-        :effect (and 
-                        (not (boat ?from))
-                        (boat ?to)
-                        (not (stayed ?x ?from))
-                        (not (stayed ?y ?from))
-                        (stayed ?x ?to)
-                        (stayed ?y ?to) 
-                        (not (value2 ?cannibals_in_side1))
-                        (value0 ?cannibals_in_side1)
-        )
-    )
-
-    (:action move_two_cann_s2_to_s1_cc30
-        :parameters (?x ?y ?from ?to ?missionaries_in_side1 ?cannibals_in_side1)
-        :precondition (and 
-                        (boat ?from)              ; boat must be at 'from'
-                        (is_side2 ?from)
-                        (is_side1 ?to)
-                        (cannibal ?x)
-                        (cannibal ?y)
-                        (stayed ?x ?from)         ; x must stay at 'from'
-                        (stayed ?y ?from)         ; y must stay at 'from'
-                        (value3 ?missionaries_in_side1)
-                        (value0 ?cannibals_in_side1)
-                        (transfer ?x ?y)
-                        (missionary ?missionaries_in_side1)
-                        (cannibal ?cannibals_in_side1)
-                       
-        )
-        :effect (and 
-                        (not (boat ?from))
-                        (boat ?to)
-                        (not (stayed ?x ?from))
-                        (not (stayed ?y ?from))
-                        (stayed ?x ?to)
-                        (stayed ?y ?to) 
-                        (not (value0 ?cannibals_in_side1))
-                        (value2 ?cannibals_in_side1)
-        )
-    )
-
-    (:action move_two_cann_s2_to_s1_cc31
-        :parameters (?x ?y ?from ?to ?missionaries_in_side1 ?cannibals_in_side1)
-        :precondition (and 
-                        (boat ?from)              ; boat must be at 'from'
-                        (is_side2 ?from)
-                        (is_side1 ?to)
-                        (cannibal ?x)
-                        (cannibal ?y)
-                        (stayed ?x ?from)         ; x must stay at 'from'
-                        (stayed ?y ?from)         ; y must stay at 'from'
-                        (value3 ?missionaries_in_side1)
-                        (value1 ?cannibals_in_side1)
-                        (transfer ?x ?y)
-                        (missionary ?missionaries_in_side1)
-                        (cannibal ?cannibals_in_side1)
-                       
-        )
-        :effect (and 
-                        (not (boat ?from))
-                        (boat ?to)
-                        (not (stayed ?x ?from))
-                        (not (stayed ?y ?from))
-                        (stayed ?x ?to)
-                        (stayed ?y ?to) 
-                        (not (value1 ?cannibals_in_side1))
-                        (value3 ?cannibals_in_side1)
-        )
-    )
-
-    (:action move_two_cann_s2_to_s1_cc00
-        :parameters (?x ?y ?from ?to ?missionaries_in_side1 ?cannibals_in_side1)
-        :precondition (and 
-                        (boat ?from)              ; boat must be at 'from'
-                        (is_side2 ?from)
-                        (is_side1 ?to)
-                        (cannibal ?x)
-                        (cannibal ?y)
-                        (stayed ?x ?from)         ; x must stay at 'from'
-                        (stayed ?y ?from)         ; y must stay at 'from'
-                        (value0 ?missionaries_in_side1)
-                        (value0 ?cannibals_in_side1)
-                        (transfer ?x ?y)
-                        (missionary ?missionaries_in_side1)
-                        (cannibal ?cannibals_in_side1)
-                       
-        )
-        :effect (and 
-                        (not (boat ?from))
-                        (boat ?to)
-                        (not (stayed ?x ?from))
-                        (not (stayed ?y ?from))
-                        (stayed ?x ?to)
-                        (stayed ?y ?to) 
-                        (not (value0 ?cannibals_in_side1))
-                        (value2 ?cannibals_in_side1)
-        )
-    )
-
-    (:action move_two_cann_s2_to_s1_cc01
-        :parameters (?x ?y ?from ?to ?missionaries_in_side1 ?cannibals_in_side1)
-        :precondition (and 
-                        (boat ?from)              ; boat must be at 'from'
-                        (is_side2 ?from)
-                        (is_side1 ?to)
-                        (cannibal ?x)
-                        (cannibal ?y)
-                        (stayed ?x ?from)         ; x must stay at 'from'
-                        (stayed ?y ?from)         ; y must stay at 'from'
-                        (value0 ?missionaries_in_side1)
-                        (value1 ?cannibals_in_side1)
-                        (transfer ?x ?y)
-                        (missionary ?missionaries_in_side1)
-                        (cannibal ?cannibals_in_side1)
-                       
-        )
-        :effect (and 
-                        (not (boat ?from))
-                        (boat ?to)
-                        (not (stayed ?x ?from))
-                        (not (stayed ?y ?from))
-                        (stayed ?x ?to)
-                        (stayed ?y ?to) 
-                        (not (value1 ?cannibals_in_side1))
-                        (value3 ?cannibals_in_side1)
-        )
-    )
-
-    (:action move_one_miss_one_cann_s1_to_s2_mc11
-        :parameters (?x ?y ?from ?to ?missionaries_in_side1 ?cannibals_in_side1)
-        :precondition (and 
-                        (boat ?from)              ; boat must be at 'from'
-                        (is_side1 ?from)
-                        (is_side2 ?to)
-                        (missionary ?x)
-                        (cannibal ?y)
-                        (stayed ?x ?from)         ; x must stay at 'from'
-                        (stayed ?y ?from)         ; y must stay at 'from'
-                        (value1 ?missionaries_in_side1)
-                        (value1 ?cannibals_in_side1) 
-                        (missionary ?missionaries_in_side1)
-                        (cannibal ?cannibals_in_side1)            
-        )
-        :effect (and 
-                        (not (boat ?from))
-                        (boat ?to)
-                        (not (stayed ?x ?from))
-                        (not (stayed ?y ?from))
-                        (stayed ?x ?to)
-                        (stayed ?y ?to) 
-                        (not (value1 ?missionaries_in_side1))
-                        (value0 ?missionaries_in_side1)
-                        (not (value1 ?cannibals_in_side1) )
-                        (value0 ?cannibals_in_side1)   
-        )
-    )
-
-    (:action move_one_miss_one_cann_s1_to_s2_mc22
-        :parameters (?x ?y ?from ?to ?missionaries_in_side1 ?cannibals_in_side1)
-        :precondition (and 
-                        (boat ?from)              ; boat must be at 'from'
-                        (is_side1 ?from)
-                        (is_side2 ?to)
-                        (missionary ?x)
-                        (cannibal ?y)
-                        (stayed ?x ?from)         ; x must stay at 'from'
-                        (stayed ?y ?from)         ; y must stay at 'from'
-                        (value2 ?missionaries_in_side1)
-                        (value2 ?cannibals_in_side1) 
-                        (missionary ?missionaries_in_side1)
-                        (cannibal ?cannibals_in_side1)            
-        )
-        :effect (and 
-                        (not (boat ?from))
-                        (boat ?to)
-                        (not (stayed ?x ?from))
-                        (not (stayed ?y ?from))
-                        (stayed ?x ?to)
-                        (stayed ?y ?to) 
-                        (not (value2 ?missionaries_in_side1))
-                        (value1 ?missionaries_in_side1)
-                        (not (value2 ?cannibals_in_side1) )
-                        (value1 ?cannibals_in_side1)   
-        )
-    )
-
-    (:action move_one_miss_one_cann_s1_to_s2_mc33
-        :parameters (?x ?y ?from ?to ?missionaries_in_side1 ?cannibals_in_side1)
-        :precondition (and 
-                        (boat ?from)              ; boat must be at 'from'
-                        (is_side1 ?from)
-                        (is_side2 ?to)
-                        (missionary ?x)
-                        (cannibal ?y)
-                        (stayed ?x ?from)         ; x must stay at 'from'
-                        (stayed ?y ?from)         ; y must stay at 'from'
-                        (value3 ?missionaries_in_side1)
-                        (value3 ?cannibals_in_side1)  
-                        (missionary ?missionaries_in_side1)
-                        (cannibal ?cannibals_in_side1)           
-        )
-        :effect (and 
-                        (not (boat ?from))
-                        (boat ?to)
-                        (not (stayed ?x ?from))
-                        (not (stayed ?y ?from))
-                        (stayed ?x ?to)
-                        (stayed ?y ?to) 
-                        (not (value3 ?missionaries_in_side1))
-                        (value2 ?missionaries_in_side1)
-                        (not (value3 ?cannibals_in_side1) )
-                        (value2 ?cannibals_in_side1)   
-        )
-    )
-
-    (:action move_one_miss_one_cann_s2_to_s1_mc00
-        :parameters (?x ?y ?from ?to ?missionaries_in_side1 ?cannibals_in_side1)
-        :precondition (and 
-                        (boat ?from)              ; boat must be at 'from'
-                        (is_side2 ?from)
-                        (is_side1 ?to)
-                        (missionary ?x)
-                        (cannibal ?y)
-                        (stayed ?x ?from)         ; x must stay at 'from'
-                        (stayed ?y ?from)         ; y must stay at 'from'
-                        (value0 ?missionaries_in_side1)
-                        (value0 ?cannibals_in_side1) 
-                        (missionary ?missionaries_in_side1)
-                        (cannibal ?cannibals_in_side1)            
-        )            
-        
-        :effect (and 
-                        (not (boat ?from))
-                        (boat ?to)
-                        (not (stayed ?x ?from))
-                        (not (stayed ?y ?from))
-                        (stayed ?x ?to)
-                        (stayed ?y ?to) 
-                        (not (value0 ?missionaries_in_side1)) 
-                        (value1 ?missionaries_in_side1)
-                        (not (value0 ?cannibals_in_side1) )
-                        (value1 ?cannibals_in_side1) 
-        )
-    )
-
-    (:action move_one_miss_one_cann_s2_to_s1_mc11
-        :parameters (?x ?y ?from ?to ?missionaries_in_side1 ?cannibals_in_side1)
-        :precondition (and 
-                        (boat ?from)              ; boat must be at 'from'
-                        (is_side2 ?from)
-                        (is_side1 ?to)
-                        (missionary ?x)
-                        (cannibal ?y)
-                        (stayed ?x ?from)         ; x must stay at 'from'
-                        (stayed ?y ?from)         ; y must stay at 'from'
-                        (value1 ?missionaries_in_side1)
-                        (value1 ?cannibals_in_side1) 
-                        (missionary ?missionaries_in_side1)
-                        (cannibal ?cannibals_in_side1)            
-        )            
-        
-        :effect (and 
-                        (not (boat ?from))
-                        (boat ?to)
-                        (not (stayed ?x ?from))
-                        (not (stayed ?y ?from))
-                        (stayed ?x ?to)
-                        (stayed ?y ?to) 
-                        (not (value1 ?missionaries_in_side1)) 
-                        (value2 ?missionaries_in_side1)
-                        (not (value1 ?cannibals_in_side1) )
-                        (value2 ?cannibals_in_side1) 
-        )
-    )
-
-    (:action move_one_miss_one_cann_s2_to_s1_mc22
-        :parameters (?x ?y ?from ?to ?missionaries_in_side1 ?cannibals_in_side1)
-        :precondition (and 
-                        (boat ?from)              ; boat must be at 'from'
-                        (is_side2 ?from)
-                        (is_side1 ?to)
-                        (missionary ?x)
-                        (cannibal ?y)
-                        (stayed ?x ?from)         ; x must stay at 'from'
-                        (stayed ?y ?from)         ; y must stay at 'from'
-                        (value2 ?missionaries_in_side1)
-                        (value2 ?cannibals_in_side1)  
-                        (missionary ?missionaries_in_side1)
-                        (cannibal ?cannibals_in_side1)           
-        )            
-        
-        :effect (and 
-                        (not (boat ?from))
-                        (boat ?to)
-                        (not (stayed ?x ?from))
-                        (not (stayed ?y ?from))
-                        (stayed ?x ?to)
-                        (stayed ?y ?to) 
-                        (not (value2 ?missionaries_in_side1)) 
-                        (value3 ?missionaries_in_side1)
-                        (not (value2 ?cannibals_in_side1) )
-                        (value3 ?cannibals_in_side1) 
-        )
-    )
-
-    (:action move_one_miss_s1_to_s2_m11
-        :parameters (?x ?from ?to ?missionaries_in_side1 ?cannibals_in_side1)
-        :precondition (and 
-                        (boat ?from)              ; boat must be at 'from'
-                        (is_side1 ?from)
-                        (is_side2 ?to)
-                        (missionary ?x)
-                        (stayed ?x ?from)         ; x must stay at 'from'
-                        (value1 ?missionaries_in_side1)
-                        (value1 ?cannibals_in_side1) 
-                        (missionary ?missionaries_in_side1)
-                        (cannibal ?cannibals_in_side1) 
-        )
-        :effect (and 
-                        (not (boat ?from))
-                        (boat ?to)
-                        (not (stayed ?x ?from))
-                        (stayed ?x ?to)
-                        (not (value1 ?missionaries_in_side1))
-                        (value0 ?missionaries_in_side1)
-        )
-    )
-
-    (:action move_one_miss_s1_to_s2_m32
-        :parameters (?x ?from ?to ?missionaries_in_side1 ?cannibals_in_side1)
-        :precondition (and 
-                        (boat ?from)              ; boat must be at 'from'
-                        (is_side1 ?from)
-                        (is_side2 ?to)
-                        (missionary ?x)
-                        (stayed ?x ?from)         ; x must stay at 'from'
-                        (value3 ?missionaries_in_side1)
-                        (value2 ?cannibals_in_side1)
-                        (missionary ?missionaries_in_side1)
-                        (cannibal ?cannibals_in_side1)  
-        )
-        :effect (and 
-                        (not (boat ?from))
-                        (boat ?to)
-                        (not (stayed ?x ?from))
-                        (stayed ?x ?to)
-                        (not (value3 ?missionaries_in_side1))
-                        (value2 ?missionaries_in_side1)
-        )
-    )
-
-    (:action move_one_miss_s2_to_s1_m01
-        :parameters (?x ?from ?to ?missionaries_in_side1 ?cannibals_in_side1)
-        :precondition (and 
-                        (boat ?from)              ; boat must be at 'from'
-                        (is_side2 ?from)
-                        (is_side1 ?to)
-                        (missionary ?x)
-                        (stayed ?x ?from)         ; x must stay at 'from'
-                        (value0 ?missionaries_in_side1)
-                        (value1 ?cannibals_in_side1)
-                        (missionary ?missionaries_in_side1)
-                        (cannibal ?cannibals_in_side1)
-        )
-        :effect (and 
-                        (not (boat ?from))
-                        (boat ?to)
-                        (not (stayed ?x ?from))
-                        (stayed ?x ?to)
-                        (not (value0 ?missionaries_in_side1))
-                        (value1 ?missionaries_in_side1)
-        )
-    )
-     
-    (:action move_one_miss_s2_to_s1_m22
-        :parameters (?x ?from ?to ?missionaries_in_side1 ?cannibals_in_side1)
-        :precondition (and 
-                        (boat ?from)              ; boat must be at 'from'
-                        (is_side2 ?from)
-                        (is_side1 ?to)
-                        (missionary ?x)
-                        (stayed ?x ?from)         ; x must stay at 'from'
-                        (value2 ?missionaries_in_side1)
-                        (value2 ?cannibals_in_side1)
-                        (missionary ?missionaries_in_side1)
-                        (cannibal ?cannibals_in_side1)
-        )
-        :effect (and 
-                        (not (boat ?from))
-                        (boat ?to)
-                        (not (stayed ?x ?from))
-                        (stayed ?x ?to)
-                        (not (value2 ?missionaries_in_side1))
-                        (value3 ?missionaries_in_side1)
-        )
-    )
-
-    (:action move_one_cann_s1_to_s2_c01
-        :parameters (?x ?from ?to ?missionaries_in_side1 ?cannibals_in_side1)
-        :precondition (and 
-                        (boat ?from)              ; boat must be at 'from'
-                        (is_side1 ?from)
-                        (is_side2 ?to)
-                        (cannibal ?x)
-                        (stayed ?x ?from)         ; x must stay at 'from'
-                        (value0 ?missionaries_in_side1)
-                        (value1 ?cannibals_in_side1)
-                        (missionary ?missionaries_in_side1)
-                        (cannibal ?cannibals_in_side1)
-        )
-        :effect (and 
-                        (not (boat ?from))
-                        (boat ?to)
-                        (not (stayed ?x ?from))
-                        (stayed ?x ?to)
-                        (not (value1 ?cannibals_in_side1))
-                        (value0 ?cannibals_in_side1)
-        )
-    )
-
-    (:action move_one_cann_s1_to_s2_c02
-        :parameters (?x ?from ?to ?missionaries_in_side1 ?cannibals_in_side1)
-        :precondition (and 
-                        (boat ?from)              ; boat must be at 'from'
-                        (is_side1 ?from)
-                        (is_side2 ?to)
-                        (cannibal ?x)
-                        (stayed ?x ?from)         ; x must stay at 'from'
-                        (value0 ?missionaries_in_side1)
-                        (value2 ?cannibals_in_side1)
-                        (missionary ?missionaries_in_side1)
-                        (cannibal ?cannibals_in_side1)
-        )
-        :effect (and 
-                        (not (boat ?from))
-                        (boat ?to)
-                        (not (stayed ?x ?from))
-                        (stayed ?x ?to)
-                        (not (value2 ?cannibals_in_side1))
-                        (value1 ?cannibals_in_side1)
-        )
-    )
-     
-    (:action move_one_cann_s1_to_s2_c03
-        :parameters (?x ?from ?to ?missionaries_in_side1 ?cannibals_in_side1)
-        :precondition (and 
-                        (boat ?from)              ; boat must be at 'from'
-                        (is_side1 ?from)
-                        (is_side2 ?to)
-                        (cannibal ?x)
-                        (stayed ?x ?from)         ; x must stay at 'from'
-                        (value0 ?missionaries_in_side1)
-                        (value3 ?cannibals_in_side1)
-                        (missionary ?missionaries_in_side1)
-                        (cannibal ?cannibals_in_side1)
-        )
-        :effect (and 
-                        (not (boat ?from))
-                        (boat ?to)
-                        (not (stayed ?x ?from))
-                        (stayed ?x ?to)
-                        (not (value3 ?cannibals_in_side1))
-                        (value2 ?cannibals_in_side1)
-        )
-    )
-
-    (:action move_one_cann_s1_to_s2_c33
-        :parameters (?x ?from ?to ?missionaries_in_side1 ?cannibals_in_side1)
-        :precondition (and 
-                        (boat ?from)              ; boat must be at 'from'
-                        (is_side1 ?from)
-                        (is_side2 ?to)
-                        (cannibal ?x)
-                        (stayed ?x ?from)         ; x must stay at 'from'
-                        (value3 ?missionaries_in_side1)
-                        (value3 ?cannibals_in_side1)
-                        (missionary ?missionaries_in_side1)
-                        (cannibal ?cannibals_in_side1)
-        )
-        :effect (and 
-                        (not (boat ?from))
-                        (boat ?to)
-                        (not (stayed ?x ?from))
-                        (stayed ?x ?to)
-                        (not (value3 ?cannibals_in_side1))
-                        (value2 ?cannibals_in_side1)
-        )
-    )
-
-     (:action move_one_cann_s1_to_s2_c32
-        :parameters (?x ?from ?to ?missionaries_in_side1 ?cannibals_in_side1)
-        :precondition (and 
-                        (boat ?from)              ; boat must be at 'from'
-                        (is_side1 ?from)
-                        (is_side2 ?to)
-                        (cannibal ?x)
-                        (stayed ?x ?from)         ; x must stay at 'from'
-                        (value3 ?missionaries_in_side1)
-                        (value2 ?cannibals_in_side1)
-                        (missionary ?missionaries_in_side1)
-                        (cannibal ?cannibals_in_side1)
-        )
-        :effect (and 
-                        (not (boat ?from))
-                        (boat ?to)
-                        (not (stayed ?x ?from))
-                        (stayed ?x ?to)
-                        (not (value2 ?cannibals_in_side1))
-                        (value1 ?cannibals_in_side1)
-        )
-    )
-
-     (:action move_one_cann_s1_to_s2_c31
-        :parameters (?x ?from ?to ?missionaries_in_side1 ?cannibals_in_side1)
-        :precondition (and 
-                        (boat ?from)              ; boat must be at 'from'
-                        (is_side1 ?from)
-                        (is_side2 ?to)
-                        (cannibal ?x)
-                        (stayed ?x ?from)         ; x must stay at 'from'
-                        (value3 ?missionaries_in_side1)
-                        (value1 ?cannibals_in_side1)
-                        (missionary ?missionaries_in_side1)
-                        (cannibal ?cannibals_in_side1)
-        )
-        :effect (and 
-                        (not (boat ?from))
-                        (boat ?to)
-                        (not (stayed ?x ?from))
-                        (stayed ?x ?to)
-                        (not (value1 ?cannibals_in_side1))
-                        (value0 ?cannibals_in_side1)
-        )
-    )
-
-    (:action move_one_cann_s2_to_s1_c00
-        :parameters (?x ?from ?to ?missionaries_in_side1 ?cannibals_in_side1)
-        :precondition (and 
-                        (boat ?from)              ; boat must be at 'from'
-                        (is_side2 ?from)
-                        (is_side1 ?to)
-                        (cannibal ?x)
-                        (stayed ?x ?from)         ; x must stay at 'from'
-                        (value0 ?missionaries_in_side1)
-                        (value0 ?cannibals_in_side1)
-                        (missionary ?missionaries_in_side1)
-                        (cannibal ?cannibals_in_side1)
-        )
-        :effect (and 
-                        (not (boat ?from))
-                        (boat ?to)
-                        (not (stayed ?x ?from))
-                        (stayed ?x ?to)
-                        (not (value0 ?cannibals_in_side1))
-                        (value1 ?cannibals_in_side1)
-        )
-    )
-
-    (:action move_one_cann_s2_to_s1_c01
-        :parameters (?x ?from ?to ?missionaries_in_side1 ?cannibals_in_side1)
-        :precondition (and 
-                        (boat ?from)              ; boat must be at 'from'
-                        (is_side2 ?from)
-                        (is_side1 ?to)
-                        (cannibal ?x)
-                        (stayed ?x ?from)         ; x must stay at 'from'
-                        (value0 ?missionaries_in_side1)
-                        (value1 ?cannibals_in_side1)
-                        (missionary ?missionaries_in_side1)
-                        (cannibal ?cannibals_in_side1)
-        )
-        :effect (and 
-                        (not (boat ?from))
-                        (boat ?to)
-                        (not (stayed ?x ?from))
-                        (stayed ?x ?to)
-                        (not (value1 ?cannibals_in_side1))
-                        (value2 ?cannibals_in_side1)
-        )
-    )
-
-    (:action move_one_cann_s2_to_s1_c02
-        :parameters (?x ?from ?to ?missionaries_in_side1 ?cannibals_in_side1)
-        :precondition (and 
-                        (boat ?from)              ; boat must be at 'from'
-                        (is_side2 ?from)
-                        (is_side1 ?to)
-                        (cannibal ?x)
-                        (stayed ?x ?from)         ; x must stay at 'from'
-                        (value0 ?missionaries_in_side1)
-                        (value2 ?cannibals_in_side1)
-                        (missionary ?missionaries_in_side1)
-                        (cannibal ?cannibals_in_side1)
-        )
-        :effect (and 
-                        (not (boat ?from))
-                        (boat ?to)
-                        (not (stayed ?x ?from))
-                        (stayed ?x ?to)
-                        (not (value2 ?cannibals_in_side1))
-                        (value3 ?cannibals_in_side1)
-        )
-    )
-
-    (:action move_one_cann_s2_to_s1_c30
-        :parameters (?x ?from ?to ?missionaries_in_side1 ?cannibals_in_side1)
-        :precondition (and 
-                        (boat ?from)              ; boat must be at 'from'
-                        (is_side2 ?from)
-                        (is_side1 ?to)
-                        (cannibal ?x)
-                        (stayed ?x ?from)         ; x must stay at 'from'
-                        (value3 ?missionaries_in_side1)
-                        (value0 ?cannibals_in_side1)
-                        (missionary ?missionaries_in_side1)
-                        (cannibal ?cannibals_in_side1)
-        )
-        :effect (and 
-                        (not (boat ?from))
-                        (boat ?to)
-                        (not (stayed ?x ?from))
-                        (stayed ?x ?to)
-                        (not (value0 ?cannibals_in_side1))
-                        (value1 ?cannibals_in_side1)
-        )
-    )
-
-    (:action move_one_cann_s2_to_s1_c31
-        :parameters (?x ?from ?to ?missionaries_in_side1 ?cannibals_in_side1)
-        :precondition (and 
-                        (boat ?from)              ; boat must be at 'from'
-                        (is_side2 ?from)
-                        (is_side1 ?to)
-                        (cannibal ?x)
-                        (stayed ?x ?from)         ; x must stay at 'from'
-                        (value3 ?missionaries_in_side1)
-                        (value1 ?cannibals_in_side1)
-                        (missionary ?missionaries_in_side1)
-                        (cannibal ?cannibals_in_side1)
-        )
-        :effect (and 
-                        (not (boat ?from))
-                        (boat ?to)
-                        (not (stayed ?x ?from))
-                        (stayed ?x ?to)
-                        (not (value1 ?cannibals_in_side1))
-                        (value2 ?cannibals_in_side1)
-        )
-    )
-
-    (:action move_one_cann_s2_to_s1_c32
-        :parameters (?x ?from ?to ?missionaries_in_side1 ?cannibals_in_side1)
-        :precondition (and 
-                        (boat ?from)              ; boat must be at 'from'
-                        (is_side2 ?from)
-                        (is_side1 ?to)
-                        (cannibal ?x)
-                        (stayed ?x ?from)         ; x must stay at 'from'
-                        (value3 ?missionaries_in_side1)
-                        (value2 ?cannibals_in_side1)
-                        (missionary ?missionaries_in_side1)
-                        (cannibal ?cannibals_in_side1)
-        )
-        :effect (and 
-                        (not (boat ?from))
-                        (boat ?to)
-                        (not (stayed ?x ?from))
-                        (stayed ?x ?to)
-                        (not (value2 ?cannibals_in_side1))
-                        (value3 ?cannibals_in_side1)
+        :effect (and
+            (not (boat ?from)) (boat ?to)
+            (not (missionaries ?from ?m1)) (missionaries ?from ?m1n)
+            (not (missionaries ?to ?m2)) (missionaries ?to ?m2n)
+            (not (cannibals ?from ?c1)) (cannibals ?from ?c1n)
+            (not (cannibals ?to ?c2)) (cannibals ?to ?c2n)
         )
     )
 )

@@ -1,77 +1,24 @@
 (define (domain puzzle_8_domain)
+    (:requirements :strips)
 
-    (:requirements :strips )
-
-
-    (:predicates 
-        (at ?tile ?val)         ;value at tile
-
-        (blank ?tile)
-
-        (up ?from_tile ?to_tile)
-        (down ?from_tile ?to_tile)
-        (left ?from_tile ?to_tile)
-        (right ?from_tile ?to_tile)
+    (:predicates
+        (at ?tile ?pos)                 ; tile is at board position pos
+        (blank ?pos)                    ; board position pos is blank
+        (adjacent ?from ?to)            ; from and to are neighbours (up/down/left/right)
     )
 
-    (:action move_up
-        :parameters (?from ?val ?to)
-        :precondition (and 
-            (at ?from ?val)
+    (:action move                       ; slide tile from its position into the blank neighbour
+        :parameters (?tile ?from ?to)
+        :precondition (and
+            (at ?tile ?from)
             (blank ?to)
-            (up ?from ?to)
+            (adjacent ?from ?to)
         )
-        :effect (and 
-            (not (at ?from ?val))
-            (at ?to ?val)
+        :effect (and
+            (not (at ?tile ?from))
+            (at ?tile ?to)
             (not (blank ?to))
             (blank ?from)
         )
     )
-
-    (:action move_down
-        :parameters (?from ?val ?to)
-        :precondition (and 
-            (at ?from ?val)
-            (blank ?to)
-            (down ?from ?to)
-        )
-        :effect (and 
-            (not (at ?from ?val))
-            (at ?to ?val)
-            (not (blank ?to))
-            (blank ?from)
-        )
-    )
-
-     (:action move_left
-        :parameters (?from ?val ?to)
-        :precondition (and 
-            (at ?from ?val)
-            (blank ?to)
-            (left ?from ?to)
-        )
-        :effect (and 
-            (not (at ?from ?val))
-            (at ?to ?val)
-            (not (blank ?to))
-            (blank ?from)
-        )
-    )
-     
-     (:action move_right
-        :parameters (?from ?val ?to)
-        :precondition (and 
-            (at ?from ?val)
-            (blank ?to)
-            (right ?from ?to)
-        )
-        :effect (and 
-            (not (at ?from ?val))
-            (at ?to ?val)
-            (not (blank ?to))
-            (blank ?from)
-        )
-    )
-    
 )

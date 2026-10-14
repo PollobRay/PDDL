@@ -1,48 +1,24 @@
-(define (problem Transport_problem) (:domain Transport)
-    (:objects 
-        A1 A2                   ; airplace
-        T1 T2 T3                ; truck
-        AP1 AP2 AP3             ; airport
-        A B C D E F G H         ; location
-        P1 P2 P3 P4 P5 P6 P7 P8 ;packages
+(define (problem Transport_problem)
+    (:domain Transport)
+    (:objects
+        A1 A2                   - airplane
+        T1 T2 T3                - truck
+        AP1 AP2 AP3             - location  ; airports
+        A B C D E F G H         - location
+        P1 P2 P3 P4 P5 P6 P7 P8 - package
+        n0 n1 n2 n3             - num
     )
 
     (:init
-        (vehicle A1)
-        (vehicle A2)
-        (vehicle T1)
-        (vehicle T2)
-        (vehicle T3)
-        (airplace A1)
-        (airplace A2)
-        (truck T1)
-        (truck T2)
-        (truck T3)
-        (location AP1)
-        (location AP2)
-        (location AP3)
-        (location A)
-        (location B)
-        (location C)
-        (location D)
-        (location E)
-        (location F)
-        (location G)
-        (location H)
-        (package P1)
-        (package P2)
-        (package P3)
-        (package P4)
-        (package P5)
-        (package P6)
-        (package P7)
-        (package P8)
+        (next n0 n1)
+        (next n1 n2)
+        (next n2 n3)
 
-        (n3 A1)         ; airplane capacity is 3 packages
-        (n3 A2)         ; airplane capacity is 3 packages
-        (n1 T1)         ; truck capacity is 1 package
-        (n1 T2)         ; truck capacity is 1 package
-        (n1 T3)         ; truck capacity is 1 package
+        (capacity A1 n3)    ; airplane capacity is 3 packages
+        (capacity A2 n3)    ; airplane capacity is 3 packages
+        (capacity T1 n1)    ; truck capacity is 1 package
+        (capacity T2 n1)    ; truck capacity is 1 package
+        (capacity T3 n1)    ; truck capacity is 1 package
 
         (movable A1 AP1 AP2)
         (movable A1 AP1 AP3)
@@ -88,11 +64,6 @@
         (movable T3 AP3 G)
         (movable T3 AP3 H)
 
-        (empty A1)
-        (empty A2)
-        (empty T1)
-        (empty T2)
-        (empty T3)
         (at A1 AP1)
         (at A2 AP3)
         (at T1 A)
@@ -118,6 +89,4 @@
         (at P7 B)
         (at P8 A)
     ))
-
- 
 )

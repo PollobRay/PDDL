@@ -1,0 +1,7 @@
+(cross-with-goat left right)
+(cross-alone-goat-alone right left)
+(cross-with-wolf-goat-away left right)
+(cross-with-goat right left)
+(cross-with-cabbage-wolf-away left right)
+(cross-alone-goat-away right left)
+(cross-with-goat left right)

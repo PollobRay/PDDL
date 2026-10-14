@@ -1,4 +1,8 @@
-Let, 
-    a 5x5 chess board.
-    knight is initially at (1,1) position.
-    And knight have to visit all position on the chessboard.
+Let,
+    the board be a 5x5 chess board.
+    The knight is initially at position (1,1).
+    The knight has to visit every position on the chess board exactly once.
+
+In the PDDL model a position is written as (row, col) using n1 to n5.
+A knight moves 2 rows and 1 column, or 2 columns and 1 row,
+and it can never move to a position it has already visited.

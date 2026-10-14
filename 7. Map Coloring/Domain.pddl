@@ -1,26 +1,30 @@
 (define (domain map_coloring)
-    (:requirements :strips :typing :negative-preconditions)
-    ;Typing allows the definition of types for objects within the domain
-    ; negative-precondition used for (not ) predicate
+    (:requirements :strips :typing :negative-preconditions :universal-preconditions)
+    ; typing: objects are declared as regions or colors
+    ; negative-preconditions: used for (not ...) in preconditions and goal
+    ; universal-preconditions: used for (forall ...) in the precondition
+
+    (:types region color)
+
     (:predicates
-        (adjacent ?x - region ?y - region)    ; is x adjacent to y
-        (clear ?x - region )                  ; is x not color yet
-        (color ?c - color ?x - region)        ; color c is printed on x
-        )
-    (:action make_color
-        :parameters (
-            ?current - region ?rcolor - color
-        )
-        :precondition (and 
-            (forall (?x - region)  ;This quantifies over all regions 
+        (adjacent ?x - region ?y - region)  ; x is adjacent to y
+        (clear ?x - region)                 ; x is not colored yet
+        (colored ?x - region ?c - color)    ; x is colored with c
+    )
+
+    (:action make_color                     ; color the current region with rcolor
+        :parameters (?current - region ?rcolor - color)
+        :precondition (and
+            (clear ?current)                ; a region is colored only once
+            (forall (?x - region)           ; no adjacent region already has rcolor
                 (imply (adjacent ?current ?x)
-                    (not (color ?rcolor ?x))
+                    (not (colored ?x ?rcolor))
                 )
             )
         )
-        :effect (and 
-            (color ?rcolor ?current)
+        :effect (and
+            (colored ?current ?rcolor)
             (not (clear ?current))
         )
-    ) 
-) 
+    )
+)

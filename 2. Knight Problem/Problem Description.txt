@@ -1,6 +1,6 @@
 Given a four knights problem in a 3x3 grid board, where the goal is to get each knight into the opposite corner. (A knight can move to an unoccupied space according to an L-shape movement: it must move two spaces horizontally and one vertically, or two spaces vertically and one horizontally.) Describe the problem in classical planning representation by writing a domain file and a problem file in PDDL.
 
-Initial positions of the four knights 
+Initial positions of the four knights:
 1 _ 2
 - - -
 3 _ 4
@@ -9,3 +9,6 @@ Goal positions of those four knights:
 4 _ 3
 - - -
 2 _ 1
+
+In the PDDL model a position is written as (col, row) using pos1, pos2, pos3,
+where row 3 is the top row. So knight1 starts at (pos1, pos3), the upper left corner.

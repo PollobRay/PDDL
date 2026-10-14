@@ -1,25 +1,24 @@
-(define (domain Tower_of_Hanoi_3disk)
-    (:requirements :strips )
+(define (domain Tower_of_Hanoi_5disk)
+    (:requirements :strips)
     (:predicates
-        (clear ?disk)
-        (on ?disk1 ?tower)      ; disk1 is on tower/disk
-        (small ?disk1 ?disk2)   ; disk1 is small compare to disk2/tower
+        (clear ?x)              ; nothing is on top of disk/tower x
+        (on ?disk ?x)           ; disk is on tower/disk x
+        (smaller ?disk ?x)      ; disk is smaller than disk/tower x
     )
 
-    (:action move
-        :parameters (?disk ?fromTower ?toTower )
-        :precondition (and  
-            (small ?disk ?toTower)
+    (:action move               ; move disk from fromTower to toTower (a tower or a disk)
+        :parameters (?disk ?fromTower ?toTower)
+        :precondition (and
+            (smaller ?disk ?toTower)    ; can only be put on a larger disk or an empty tower
             (on ?disk ?fromTower)
             (clear ?disk)
             (clear ?toTower)
-            )
-        :effect (and 
+        )
+        :effect (and
             (on ?disk ?toTower)
             (not (on ?disk ?fromTower))
             (clear ?fromTower)
             (not (clear ?toTower))
         )
     )
-    
 )

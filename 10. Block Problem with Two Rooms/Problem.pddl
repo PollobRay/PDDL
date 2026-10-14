@@ -1,17 +1,16 @@
-(define (problem BLOCKS-5-0) 
-    (:domain BLOCKS)
+(define (problem BLOCKS-two-rooms-problem)
+    (:domain BLOCKS-two-rooms)
     (:objects
-        room1 room2
-        A B C 
-        D E F 
+        room1 room2     - room
+        A B C D E F     - block
     )
     (:init
         (handempty)         ; robot hand is empty
-        (at_room room1)     ;inialy robot in room1
-        (clear Table1)      ;Table1 is clear
-        (clear Table2)      ;Table2 is clear
-        (at Table1 room1)   ;Table1 is in room1
-        (at Table2 room2)   ;Table2 is in room2
+        (at_room room1)     ; initially robot is in room1
+        (clear Table1)      ; Table1 is clear
+        (clear Table2)      ; Table2 is clear
+        (at Table1 room1)   ; Table1 is in room1
+        (at Table2 room2)   ; Table2 is in room2
 
         (at A room1)        ; A in room1
         (at B room1)        ; B in room1

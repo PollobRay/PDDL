@@ -1,10 +1,8 @@
-(define (problem map_coloring_problem) 
+(define (problem map_coloring_problem)
     (:domain map_coloring)
-    (:requirements :strips :typing :negative-preconditions)
-
-    (:objects 
-        WA NT Q NSW V SA T  - region    ;Variable
-        red green blue       - color   ;Domain
+    (:objects
+        WA NT Q NSW V SA T  - region    ; variables
+        red green blue       - color   ; domain values
     )
 
     (:init
@@ -32,7 +30,7 @@
         (adjacent V SA)
         (adjacent V NSW)
 
-        (clear WA)      ;means no color
+        (clear WA)      ; not colored yet
         (clear NT)
         (clear Q)
         (clear NSW)
@@ -43,7 +41,7 @@
     )
 
     (:goal (and
-        (not (clear WA))  ; colored
+        (not (clear WA))  ; every region must be colored
         (not (clear NT))
         (not (clear Q))
         (not (clear NSW))

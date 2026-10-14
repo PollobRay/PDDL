@@ -1,1 +1,10 @@
-Note: The model is work only for minimum node expansion. 
+The 8-puzzle is a 3x3 board with 8 numbered tiles and one blank position.
+A tile can slide up, down, left or right into the adjacent blank position.
+The goal is to reach the goal arrangement from the initial arrangement.
+
+Board positions:        Initial state:        Goal state:
+  1 2 3                   1 2 3                 1 2 3
+  4 5 6                   4 5 6                 4 5 6
+  7 8 9                   _ 7 8                 7 8 _
+
+Note: This model works only with minimum node expansion.

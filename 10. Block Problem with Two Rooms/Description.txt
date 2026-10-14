@@ -1,0 +1,24 @@
+There are 2 rooms with 1 large table each, 6 blocks, and 1 robot gripper.
+The robot can pick up (or put down) one block at a time, and can move from one room
+to another holding at most 1 block. The robot starts in room1 (Room-Left).
+(The original question is in "Problem Description.jpg".)
+
+Operators:
+    pick-up(?obj ?from ?room)  : pick up ?obj from the block/table ?from in room ?room
+    put-down(?obj ?to ?room)   : put down ?obj onto the block/table ?to in room ?room
+    move(?from_room ?to_room)  : move the robot from ?from_room to ?to_room
+
+Initial state:
+    room1 (Table1):  A on B, C           room2 (Table2):  D, F on E
+
+        A                                      F
+        B   C                              D   E
+    ------------                       ------------
+
+Goal state:
+    room1 (Table1):  D on E on F         room2 (Table2):  A on B on C
+
+        D                                      A
+        E                                      B
+        F                                      C
+    ------------                       ------------

@@ -1,4 +1,22 @@
-There are some packages which is need to be transfer to its destinition.
-Also there are some Airplanes and Trucks to transfer these packages.
-This vehicles have a capacities  that can carried.
-Airplane can move between cities and truck can move within cities.
+There are some packages which need to be transferred to their destinations.
+There are also some airplanes and trucks to transfer these packages.
+These vehicles have a limited capacity of packages they can carry.
+Airplanes can move between cities and trucks can move within a city.
+
+Cities:
+    City 1: locations A, B, C and airport AP1   (truck T1)
+    City 2: locations D, E, F and airport AP2   (truck T2)
+    City 3: locations G, H    and airport AP3   (truck T3)
+
+Vehicles:
+    Airplane A1 : starts at AP1, capacity 3 packages
+    Airplane A2 : starts at AP3, capacity 3 packages
+    Truck T1    : starts at A,   capacity 1 package
+    Truck T2    : starts at F,   capacity 1 package
+    Truck T3    : starts at H,   capacity 1 package
+
+Packages:
+    P1 : A -> D        P5 : E -> H
+    P2 : B -> G        P6 : F -> C
+    P3 : C -> E        P7 : G -> B
+    P4 : D -> F        P8 : H -> A

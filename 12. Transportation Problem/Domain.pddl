@@ -1,104 +1,73 @@
 (define (domain Transport)
-    (:requirements :strips :conditional-effects :negative-preconditions :equality)
+    (:requirements :strips :typing)
 
-    (:predicates 
-        (at ?veh ?loc)
-        (empty ?veh)
-        (loaded ?veh)
-        (on ?pac ?veh)
- 
-        (package ?pac)
-        (vehicle ?veh)
-        (location ?loc)
-        (truck ?veh)
-        (airplace ?veh)
-        (movable ?veh ?from ?to)
+    (:types
+        locatable location num
+        package vehicle - locatable
+        truck airplane - vehicle
+    )
 
-        ;defines capacities 3
-        (n3 ?veh)
-        (n2 ?veh)
-        (n1 ?veh)
-        (n0 ?veh)
+    (:predicates
+        (at ?x - locatable ?loc - location)                 ; package/vehicle x is at loc
+        (on ?pac - package ?veh - vehicle)                  ; package is inside vehicle
+        (movable ?veh - vehicle ?from ?to - location)       ; vehicle can go from 'from' to 'to'
+        (capacity ?veh - vehicle ?n - num)                  ; vehicle has room for n more packages
+        (next ?n1 ?n2 - num)                                ; n2 = n1 + 1
     )
 
     (:action load
-        :parameters (?pac ?veh ?loc)
-        :precondition (and 
-            (package ?pac)
-            (vehicle ?veh)
-            (location ?loc)
-
+        :parameters (?pac - package ?veh - vehicle ?loc - location ?n1 ?n2 - num)
+        :precondition (and
             (at ?pac ?loc)
             (at ?veh ?loc)
-            (empty ?veh)
+            (capacity ?veh ?n2)         ; vehicle must have free space
+            (next ?n1 ?n2)
         )
-        :effect (and 
+        :effect (and
             (not (at ?pac ?loc))
-            (loaded ?veh)
             (on ?pac ?veh)
-
-            ;condition for capacities
-            (when (n3 ?veh) (and (n2 ?veh) (not(n3 ?veh)))) ;decrease capacity by one
-            (when (n2 ?veh) (and (n1 ?veh) (not(n2 ?veh)))) ;decrease capacity by one
-            (when (n1 ?veh) (and (n0 ?veh) (not(n1 ?veh)) (not (empty ?veh)))) ;decrease capacity by one
-            
+            (not (capacity ?veh ?n2))   ; decrease capacity by one
+            (capacity ?veh ?n1)
         )
     )
 
     (:action unload
-        :parameters (?pac ?veh ?loc)
-        :precondition (and 
-            (package ?pac)
-            (vehicle ?veh)
-            (location ?loc)
-
+        :parameters (?pac - package ?veh - vehicle ?loc - location ?n1 ?n2 - num)
+        :precondition (and
             (at ?veh ?loc)
-            (loaded ?veh)
             (on ?pac ?veh)
-
+            (capacity ?veh ?n1)
+            (next ?n1 ?n2)
         )
-        :effect (and 
+        :effect (and
             (not (on ?pac ?veh))
             (at ?pac ?loc)
-            (empty ?veh)
-
-            (when (n2 ?veh) (and (n3 ?veh) (not(n2 ?veh)))) ;increase capacity by one
-            (when (n1 ?veh) (and (n2 ?veh) (not(n1 ?veh)))) ;increase capacity by one
-            (when (n0 ?veh) (and (n1 ?veh) (not(n0 ?veh)))) ;increase capacity by one
-
+            (not (capacity ?veh ?n1))   ; increase capacity by one
+            (capacity ?veh ?n2)
         )
     )
 
-    (:action move    ;action of truck
-        :parameters (?veh ?from ?to)
+    (:action drive                      ; truck moves within a city
+        :parameters (?veh - truck ?from ?to - location)
         :precondition (and
-            (truck ?veh)
-            (location ?from)
-            (location ?to)
-            
             (at ?veh ?from)
             (movable ?veh ?from ?to)
-         )
-        :effect (and 
-            (not (at ?veh ?from))
-            (at ?veh ?to)
         )
-    )
-    
-    (:action fly            ;action by airplane
-        :parameters (?veh ?from ?to )
-        :precondition (and 
-            (airplace ?veh)
-            (location ?from)
-            (location ?to)
-
-            (movable ?veh ?from ?to)
-            (at ?veh ?from)
-        )
-        :effect (and 
+        :effect (and
             (not (at ?veh ?from))
             (at ?veh ?to)
         )
     )
 
+    (:action fly                        ; airplane moves between city airports
+        :parameters (?veh - airplane ?from ?to - location)
+        :precondition (and
+            (at ?veh ?from)
+            (movable ?veh ?from ?to)
+        )
+        :effect (and
+            (not (at ?veh ?from))
+            (at ?veh ?to)
+        )
+    )
 )

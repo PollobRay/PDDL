@@ -1,0 +1,5 @@
+(slide t6 p22 p32)
+(slide t8 p12 p22)
+(slide t2 p11 p12)
+(slide t1 p21 p11)
+(slide t8 p22 p21)

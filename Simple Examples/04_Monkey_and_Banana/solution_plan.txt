@@ -1,0 +1,4 @@
+(go door window)
+(push window middle)
+(climb middle)
+(grasp middle)

@@ -1,0 +1,15 @@
+The Dining Philosophers Problem states that there are 5 philosophers who are engaged in two activities:
+thinking and eating.
+Meals are taken communally at a table with five plates and five forks arranged in a cycle.
+To eat, a philosopher needs both the left and the right fork.
+Each fork is shared with a neighbour, so two neighbours cannot eat at the same time.
+
+Forks:
+    Ph1 : left F1, right F2
+    Ph2 : left F2, right F3
+    Ph3 : left F3, right F4
+    Ph4 : left F4, right F5
+    Ph5 : left F5, right F1
+
+Initially every philosopher is thinking and every fork is on the table.
+The goal is that every philosopher has eaten once.

@@ -2,67 +2,54 @@
     (:domain puzzle_8_domain)
 
     (:objects
-        tile_1 tile_2 tile_3
-        tile_4 tile_5 tile_6
-        tile_7 tile_8 tile_9
+        pos_1 pos_2 pos_3           ; board positions
+        pos_4 pos_5 pos_6
+        pos_7 pos_8 pos_9
 
-        val_1 val_2 val_3 val_4 val_5 val_6 val_7 val_8 
+        tile_1 tile_2 tile_3 tile_4 tile_5 tile_6 tile_7 tile_8
     )
 
     (:init
-        (at tile_1 val_1)
-        (at tile_2 val_2)
-        (at tile_3 val_3)
+        (at tile_1 pos_1)
+        (at tile_2 pos_2)
+        (at tile_3 pos_3)
 
-        (at tile_4 val_4)
-        (at tile_5 val_5)
-        (at tile_6 val_6)
-        
-        (blank tile_7)
-        (at tile_8 val_7)
-        (at tile_9 val_8)
+        (at tile_4 pos_4)
+        (at tile_5 pos_5)
+        (at tile_6 pos_6)
 
-        (up tile_4 tile_1)
-        (up tile_5 tile_2)
-        (up tile_6 tile_3)
-        (up tile_7 tile_4)
-        (up tile_8 tile_5)
-        (up tile_9 tile_6)
+        (blank pos_7)
+        (at tile_7 pos_8)
+        (at tile_8 pos_9)
 
-        (down tile_1 tile_4)
-        (down tile_2 tile_5)
-        (down tile_3 tile_6)
-        (down tile_4 tile_7)
-        (down tile_5 tile_8)
-        (down tile_6 tile_9)
+        ; vertical neighbours
+        (adjacent pos_1 pos_4) (adjacent pos_4 pos_1)
+        (adjacent pos_2 pos_5) (adjacent pos_5 pos_2)
+        (adjacent pos_3 pos_6) (adjacent pos_6 pos_3)
+        (adjacent pos_4 pos_7) (adjacent pos_7 pos_4)
+        (adjacent pos_5 pos_8) (adjacent pos_8 pos_5)
+        (adjacent pos_6 pos_9) (adjacent pos_9 pos_6)
 
-        (left tile_2 tile_1)
-        (left tile_3 tile_2)
-        (left tile_5 tile_4)
-        (left tile_6 tile_5)
-        (left tile_8 tile_7)
-        (left tile_9 tile_8)
-
-        (right tile_1 tile_2)
-        (right tile_2 tile_3)
-        (right tile_4 tile_5)
-        (right tile_5 tile_6)
-        (right tile_7 tile_8)
-        (right tile_8 tile_9)
+        ; horizontal neighbours
+        (adjacent pos_1 pos_2) (adjacent pos_2 pos_1)
+        (adjacent pos_2 pos_3) (adjacent pos_3 pos_2)
+        (adjacent pos_4 pos_5) (adjacent pos_5 pos_4)
+        (adjacent pos_5 pos_6) (adjacent pos_6 pos_5)
+        (adjacent pos_7 pos_8) (adjacent pos_8 pos_7)
+        (adjacent pos_8 pos_9) (adjacent pos_9 pos_8)
     )
 
     (:goal (and
-        (at tile_1 val_1)
-        (at tile_2 val_2)
-        (at tile_3 val_3)
+        (at tile_1 pos_1)
+        (at tile_2 pos_2)
+        (at tile_3 pos_3)
 
-        (at tile_4 val_4)
-        (at tile_5 val_5)
-        (at tile_6 val_6)
+        (at tile_4 pos_4)
+        (at tile_5 pos_5)
+        (at tile_6 pos_6)
 
-        (at tile_7 val_7)
-        (at tile_8 val_8)
-        (blank tile_9)
+        (at tile_7 pos_7)
+        (at tile_8 pos_8)
+        (blank pos_9)
     ))
-    
 )
